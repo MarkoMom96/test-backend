@@ -22,10 +22,10 @@ export class TagService {
   }
 
   async getById(id: number) {
-    const tag = await this.tagRepo.findOneBy({ id: id });
-    if (tag) return tag;
+    const tag = await this.tagRepo.findOneBy({ id });
+    if (!tag) return 'Tag with that id doesnt exist!';
 
-    return 'Tag with that id doesnt exist!';
+    return tag;
   }
 
   addNew(tagName: string) {
@@ -33,22 +33,22 @@ export class TagService {
     return this.tagRepo.save(newTag);
   }
   addNewMany(tagNames: CreateTagDto[]) {
-    let returnList = [];
-    for (const tag of tagNames) {
-      this.tagRepo.create({ tagName: tag.tagName });
-      this.tagRepo.save(tag);
+    const returnList = [];
+    tagNames.map((tag) => {
+      const newTag = this.tagRepo.create({ tagName: tag.tagName });
+      this.tagRepo.save(newTag);
       returnList.push(tag);
-    }
+    });
     return returnList;
   }
   async editById(id: number, newName: string) {
-    const tag = await this.tagRepo.findOneBy({ id: id });
+    const tag = await this.tagRepo.findOneBy({ id });
     if (!tag) return "'Tag with that id doesnt exist!';";
 
     tag.tagName = newName;
     return this.tagRepo.save(tag);
   }
   deleteById(id: number) {
-    return this.tagRepo.delete({ id: id });
+    return this.tagRepo.delete({ id });
   }
 }
