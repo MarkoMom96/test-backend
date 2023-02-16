@@ -16,8 +16,8 @@ export class TagController {
   constructor(private tagService: TagService) {}
 
   @Get('/')
-  getAll(@Query('from') from: number, @Query('limit') limit: number): any {
-    return this.tagService.getAll(from, limit);
+  getAll(): any {
+    return this.tagService.getAll();
   }
   @Get('/:id')
   getById(@Param('id') id: number) {

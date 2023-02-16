@@ -17,7 +17,7 @@ export class User {
   })
   @Validator.IsString()
   @Validator.IsNotEmpty()
-  userName: string;
+  username: string;
 
   @Column({
     type: 'varchar',

@@ -8,17 +8,8 @@ import { Tag } from './tag.entity';
 export class TagService {
   constructor(@InjectRepository(Tag) private tagRepo: Repository<Tag>) {}
 
-  async getAll(from: number, limit: number) {
-    let numOfItmes = await this.tagRepo.count();
-    if (limit) numOfItmes = limit;
-
-    return await this.tagRepo.findAndCount({
-      order: {
-        id: 'ASC',
-      },
-      skip: from,
-      take: numOfItmes,
-    });
+  async getAll() {
+    return await this.tagRepo.find();
   }
 
   async getById(id: number) {

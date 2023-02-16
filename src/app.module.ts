@@ -22,7 +22,7 @@ import { MulterModule } from '@nestjs/platform-express';
       host: 'localhost',
       username: 'root',
       password: 'root',
-      entities: [Tag, User, Article, Image],
+      entities: [Tag, User, Article, Image, User],
       synchronize: true,
     }),
     TagModule,

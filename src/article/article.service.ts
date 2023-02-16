@@ -23,6 +23,7 @@ export class ArticleService {
     return await this.articleRepo.findAndCount({
       relations: {
         tag: true,
+        image: true,
       },
       order: {
         id: 'ASC',
@@ -41,7 +42,6 @@ export class ArticleService {
 
   async addNew(data: CreateArticleDto) {
     const tag = await this.tagRepo.findOneBy({ tagName: data.tag });
-    console.log(tag);
     if (!tag) return 'Please Choose an existing tag';
 
     const img = await this.imageRepo.findOneBy({ id: data.imageId });
@@ -69,11 +69,10 @@ export class ArticleService {
         isSmallArticle: article.isSmall,
         image: img,
       });
-      console.log('this is the new article:', newArticle);
+
       this.articleRepo.save(newArticle);
       returnList.push(newArticle);
     });
-    console.log('this is a return list', returnList);
     return returnList;
   }
 
