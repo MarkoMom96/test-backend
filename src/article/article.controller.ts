@@ -41,7 +41,6 @@ export class ArticleController {
     autoDeleteFile: false,
   })
   addNewImage(@Body() image: ImageDto) {
-    console.log(image);
     this.articleService.addImg(image);
   }
 

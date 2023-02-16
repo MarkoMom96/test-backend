@@ -14,10 +14,6 @@ export class UserController {
   getAll() {
     return this.userService.getAll();
   }
-  @Get('/marko')
-  getMojId(@Session() session) {
-    return this.userService.getById(session.userId);
-  }
 
   @Post('/signup')
   signup(@Body() data: UserDto) {
@@ -27,7 +23,6 @@ export class UserController {
   async signin(@Body() data: UserDto, @Session() session: any) {
     const user = await this.authService.signin(data);
     session.userId = user.id;
-    console.log(session);
     return user;
   }
   @Post('signout')

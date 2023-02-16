@@ -12,7 +12,6 @@ export class UserService {
   }
   async getById(id: number) {
     if (!id) return null;
-    console.log('ovo je getBId ', id);
     const user = await this.userRepo.findOneBy({ id });
     if (!user) throw new NotFoundException('User was not found');
     return user;
