@@ -1,5 +1,6 @@
 import * as Validator from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Article } from './article.entity';
 
 @Entity()
 export class Image {
@@ -12,9 +13,14 @@ export class Image {
 
   @Column({
     type: 'varchar',
-    length: 255,
+    length: 512,
   })
   @Validator.IsNotEmpty()
   @Validator.IsString()
   path: string;
+
+  @OneToMany(() => Article, (article) => article.image, {
+    cascade: true,
+  })
+  articles: Article[];
 }

@@ -11,6 +11,7 @@ import { ArticleModule } from './article/article.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Tag } from './tag/tag.entity';
 import { User } from './user/user.entity';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [

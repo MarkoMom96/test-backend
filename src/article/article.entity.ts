@@ -5,9 +5,9 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  Index,
   JoinColumn,
 } from 'typeorm';
+import { Image } from './image.entity';
 
 @Entity()
 export class Article {
@@ -38,7 +38,21 @@ export class Article {
   @Validator.MaxLength(100)
   description: string;
 
+  @Column({
+    name: 'is_small',
+    type: 'tinyint',
+    unsigned: true,
+    default: () => "'0'",
+  })
+  @Validator.IsNotEmpty()
+  @Validator.IsIn([0, 1])
+  isSmallArticle: number; // weather or no to use small article box
+
   @ManyToOne(() => Tag, (tag) => tag.id)
   @JoinColumn([{ name: 'tag_id', referencedColumnName: 'id' }])
   tag: Tag;
+
+  @ManyToOne(() => Image, (image) => image.id)
+  @JoinColumn([{ name: 'image_id', referencedColumnName: 'id' }])
+  image: Image;
 }
