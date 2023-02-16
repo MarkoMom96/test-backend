@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { AuthGuard } from './../guards/auth.guard';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import {
   Delete,
   Param,
@@ -17,11 +18,13 @@ export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
   @Get('/')
+  @UseGuards(AuthGuard)
   getAll(@Query('from') from: number, @Query('limit') limit: number): any {
     return this.articleService.getAll(from, limit);
   }
 
   @Get('/:id')
+  @UseGuards(AuthGuard)
   getById(@Param('id') id: number) {
     return this.articleService.getById(id);
   }
@@ -30,11 +33,7 @@ export class ArticleController {
   addNew(@Body() data: CreateArticleDto) {
     return this.articleService.addNew(data);
   }
-  /*   @Post('/image')
-  @UseInterceptors(FilesInterceptor('file'))
-  addNewImage(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-  } */
+
   @Post('/image')
   @FormDataRequest({
     storage: FileSystemStoredFile,
