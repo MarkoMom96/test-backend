@@ -1,18 +1,21 @@
 import { UserService } from './user.service';
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import * as crypto from 'crypto';
-import CreateUserDto from 'src/dtos/create-user-dto';
+import UserDto from 'src/dtos/create-user-dto';
 
 @Injectable()
 export class AuthService {
   constructor(private userService: UserService) {}
 
-  async signup(data: CreateUserDto) {
+  async signup(data: UserDto) {
     const checkUser = await this.userService.getByUsername(data.username);
-    if (checkUser) return 'User with this username already exists!';
+    if (checkUser) throw new BadRequestException('User already exists');
 
     const passwordHash = crypto.createHash('sha512');
-    console.log(passwordHash);
     passwordHash.update(data.password);
     const passwordHashString = passwordHash.digest('hex').toLocaleUpperCase();
 
@@ -22,5 +25,18 @@ export class AuthService {
     });
   }
 
-  singin() {}
+  async signin(data: UserDto) {
+    const storedUser = await this.userService.getByUsername(data.username);
+    if (!storedUser) throw new BadRequestException('Given data is incorrect');
+
+    const storedHash = storedUser.password;
+
+    const passwordHash = crypto.createHash('sha512');
+    passwordHash.update(data.password);
+    const passwordHashString = passwordHash.digest('hex').toLocaleUpperCase();
+    if (passwordHashString !== storedHash)
+      throw new BadRequestException('Given data is incorrect');
+
+    return storedUser;
+  }
 }

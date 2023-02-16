@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NOTFOUND } from 'dns';
 import CreateArticleDto from 'src/dtos/create-article-dto';
@@ -35,17 +40,17 @@ export class ArticleService {
 
   async getById(id: number) {
     const tag = await this.articleRepo.findOneBy({ id });
-    if (!tag) return 'Article with that id doesnt exist!';
+    if (!tag) throw new NotFoundException();
 
     return tag;
   }
 
   async addNew(data: CreateArticleDto) {
     const tag = await this.tagRepo.findOneBy({ tagName: data.tag });
-    if (!tag) return 'Please Choose an existing tag';
+    if (!tag) throw new NotFoundException('Tag was not found');
 
     const img = await this.imageRepo.findOneBy({ id: data.imageId });
-    if (!img) return 'Image not Found!';
+    if (!img) throw new NotFoundException('Image was not found');
     const article = this.articleRepo.create({
       title: data.title,
       description: data.description,

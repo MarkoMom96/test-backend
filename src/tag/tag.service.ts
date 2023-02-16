@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import CreateTagDto from 'src/dtos/create-tag-dto';
 import { Repository } from 'typeorm';
@@ -14,7 +14,7 @@ export class TagService {
 
   async getById(id: number) {
     const tag = await this.tagRepo.findOneBy({ id });
-    if (!tag) return 'Tag with that id doesnt exist!';
+    if (!tag) throw new NotFoundException('Tag was not found');
 
     return tag;
   }
@@ -34,7 +34,7 @@ export class TagService {
   }
   async editById(id: number, newName: string) {
     const tag = await this.tagRepo.findOneBy({ id });
-    if (!tag) return "'Tag with that id doesnt exist!';";
+    if (!tag) throw new NotFoundException('Tag was not found!');
 
     tag.tagName = newName;
     return this.tagRepo.save(tag);

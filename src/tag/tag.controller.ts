@@ -8,6 +8,7 @@ import {
   Patch,
   Delete,
   Query,
+  Session,
 } from '@nestjs/common';
 import CreateTagDto from 'src/dtos/create-tag-dto';
 
